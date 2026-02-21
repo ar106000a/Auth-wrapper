@@ -1,0 +1,351 @@
+{
+  "info": {
+    "_postman_id": "237c28ed-1746-4c7e-8bff-4c8aa0044e87",
+    "name": "Auth",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46652364"
+  },
+  "item": [
+    {
+      "name": "Register abuse",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"{{$randomPassword}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/register",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Refresh endpoint",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "localhost:5000/api/auth/refresh",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "refresh"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "health endpoint",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/health",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register endpoint",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "// {\r\n//     \"username\":\"{{$randomUserName}}\",\r\n//     \"email\":\"{{$randomEmail}}\",\r\n//     \"password\":\"{{$randomPassword}}\"\r\n// }\r\n{\r\n    \"username\": \"ali123456\",\r\n    \"email\":\"ar1062000a@gmail.com\",\r\n    \"password\":\"3490000aA@\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/register",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Confirm email endpoint",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\" : \"379cdcba-930b-4d99-bfbd-0a42ea62a531\",\r\n    \"otp\": 755403\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/confirm_email",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "confirm_email"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login endpoint",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Parse the response body\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "// 2. Save the refreshToken to a collection variable\r",
+              "// Adjust the path (e.g., jsonData.data.refreshToken) based on your API structure\r",
+              "if (jsonData.refreshToken) {\r",
+              "    pm.collectionVariables.set(\"current_refresh_token\", jsonData.refreshToken);\r",
+              "    console.log(\"Refresh Token has been saved!\");\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"chromaticartison@gmail.com\",\r\n    \"password\":\"3490000aA@\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/login",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "OTP Sending for password reset endpoint",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"ar1062000a@gmail.com\",\r\n    \"purpose\":\"Password reset\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/password/otp",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "password",
+            "otp"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "OTP verification for reset endpoint",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"ar1062000a@gmail.com\",\r\n    \"otp\": 446535\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/password/verify",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "password",
+            "verify"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Resetting password endpoint",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"ar1062000a@gmail.com\",\r\n    \"password\":\"3490000aA@\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/password/reset",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "password",
+            "reset"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "logout endpoint",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:5000/api/auth/logout",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getProfile endpoint",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZDRmZjU4OS1lMWQzLTQxM2UtYTY2OC0wMjBiNjEyYWEyMWYiLCJpYXQiOjE3NzE0MTAxNzMsImV4cCI6MTc3MTQxMTA3M30.F2YjeScgUOjApVnHz2fdajINdat7VTQ2bzr9Lv1xz1M",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "localhost:5000/app/getProfile",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "app",
+            "getProfile"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
