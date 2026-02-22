@@ -1,15 +1,26 @@
+console.log("DEBUG AUTH:", {
+  user: process.env.EMAIL_USER ? "Exists" : "MISSING",
+  clientId: process.env.GMAIL_CLIENT_ID ? "Exists" : "MISSING",
+  clientSecret: process.env.GMAIL_CLIENT_SECRET ? "Exists" : "MISSING",
+  refreshToken: process.env.GMAIL_REFRESH_TOKEN ? "Exists" : "MISSING",
+});
 import nodemailer from "nodemailer";
 export const transporter = nodemailer.createTransport({
   service: "gmail",
-  host: "smtp.gmail.com", // Add host explicitly
-  port: 465, // Try switching to 465
-  secure: true, // Must be true for 465
+
   auth: {
-    user: process.env.TRANSPORTER_EMAIL,
-    pass: process.env.TRANSPORTER_PASS, // not your Gmail password, but an "App password"
+    type: "OAuth2",
+    user: process.env.EMAIL_USER,
+    clientId: process.env.GMAIL_CLIENT_ID,
+    clientSecret: process.env.GMAIL_CLIENT_SECRET,
+    refreshToken: process.env.GMAIL_REFRESH_TOKEN,
   },
-  connectionTimeout: 10000, // 10 seconds
-  tls: {
-    rejectUnauthorized: false, // Helps with some cloud certificate issues
-  },
+});
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ Transporter Error:", error);
+  } else {
+    console.log("✅ Server is ready to send emails!");
+  }
 });

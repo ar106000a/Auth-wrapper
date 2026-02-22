@@ -66,7 +66,7 @@ export const registerController = async (req, res, next) => {
     //otp generation
     let otp = generateOTP();
     let mailOptions = {
-      from: "chromaticartison@gmail.com",
+      from: `"My Cool App" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Confirm your OTP at signup",
       text: `Your OTP is ${otp}`,

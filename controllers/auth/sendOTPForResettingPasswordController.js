@@ -44,7 +44,7 @@ export const sendOTPForResettingPasswordController = async (req, res, next) => {
     // Generate OTP
     const otp = generateOTP();
     const mailOptions = {
-      from: "chromaticartison@gmail.com",
+      from: `"My Cool App" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Confirm your OTP for password reset",
       text: `Your OTP is ${otp}`,
