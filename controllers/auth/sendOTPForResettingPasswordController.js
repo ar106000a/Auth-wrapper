@@ -1,7 +1,7 @@
 import { supabase } from "../../db/client.js";
 import { generateOTP } from "../../utils/otpGeneration.js";
-import { transporter } from "../../utils/transporter.js";
 import AppError from "../../utils/appError.js";
+import { sendEmail } from "../../utils/mailer.js";
 
 export const sendOTPForResettingPasswordController = async (req, res, next) => {
   try {
@@ -43,24 +43,22 @@ export const sendOTPForResettingPasswordController = async (req, res, next) => {
 
     // Generate OTP
     const otp = generateOTP();
-    const mailOptions = {
-      from: `"My Cool App" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Confirm your OTP for password reset",
-      text: `Your OTP is ${otp}`,
-    };
 
-    // Sending OTP email
+    // Inside your function...
     try {
-      const info = await transporter.sendMail(mailOptions);
-      // console.log("Email sent:", info.response);
-    } catch (emailError) {
-      // console.error("Error sending email:", emailError);
+      await sendEmail({
+        to: email,
+        subject: "Your OTP",
+        html: `<b>Your otp code is ${otp}</b>`,
+      });
+      console.log("Email sent via API!");
+    } catch (error) {
+      console.error("Mail API Error:", error);
       throw new AppError(
-        "SERVER_ERROR",
+        "DATABASE_ERROR",
         500,
-        "We encountered an error while sending the OTP. Please try again!",
-        emailError,
+        "couldnt send otp to mail",
+        error,
       );
     }
 
