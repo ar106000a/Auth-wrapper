@@ -1,6 +1,6 @@
 import { supabase } from "../../db/client.js";
 import { generateOTP } from "../../utils/otpGeneration.js";
-import { transporter } from "../../utils/transporter.js";
+import { sendEmail } from "../../utils/mailer.js";
 import { generateEmailToken } from "../../utils/tokensGenerationForAuth.js";
 import bcrypt from "bcryptjs";
 import AppError from "../../utils/appError.js";
@@ -65,27 +65,23 @@ export const registerController = async (req, res, next) => {
 
     //otp generation
     let otp = generateOTP();
-    let mailOptions = {
-      from: `"My Cool App" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Confirm your OTP at signup",
-      text: `Your OTP is ${otp}`,
-    };
-
-    // Sending OTP to mail
+    // Inside your function...
     try {
-      const info = await transporter.sendMail(mailOptions);
-      // console.log("Email sent: ", info);
-    } catch (mailError) {
-      // console.error("Error sending email:", mailError);
+      await sendEmail({
+        to: email,
+        subject: "Your OTP",
+        html: `<b>Your otp code is ${otp}</b>`,
+      });
+      console.log("Email sent via API!");
+    } catch (error) {
+      console.error("Mail API Error:", error);
       throw new AppError(
-        "SERVER_ERROR",
+        "DATABASE_ERROR",
         500,
-        "Error sending mail to recipient",
-        mailError,
+        "couldnt send otp to mail",
+        error,
       );
     }
-
     //hashing password
     const saltRounds = 12;
     const passwordHash = await bcrypt.hash(password, saltRounds);

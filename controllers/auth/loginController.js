@@ -7,8 +7,7 @@ import {
 } from "../../utils/tokensGenerationForAuth.js";
 import AppError from "../../utils/appError.js"; // Import AppError
 import { generateOTP } from "../../utils/otpGeneration.js";
-import { transporter } from "../../utils/transporter.js";
-
+import { sendEmail } from "../../utils/mailer.js";
 export const loginController = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -23,7 +22,6 @@ export const loginController = async (req, res, next) => {
       );
     }
     // console.timeEnd("Validation start");
-
 
     // console.time("db lookup");
     // Get user from database
@@ -73,24 +71,21 @@ export const loginController = async (req, res, next) => {
     } else {
       // Generate OTP
       const otp = generateOTP();
-      const mailOptions = {
-        from: `"My Cool App" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: "Confirm your OTP at signup",
-        text: `Your OTP is ${otp}`,
-      };
-
-      // Sending OTP to mail
+      // Inside your function...
       try {
-        const info = await transporter.sendMail(mailOptions);
-        // console.log("Email sent: ", info);
-      } catch (mailError) {
-        // console.error("Error sending email:", mailError);
+        await sendEmail({
+          to: email,
+          subject: "Your OTP",
+          html: `<b>Your otp code is ${otp}</b>`,
+        });
+        console.log("Email sent via API!");
+      } catch (error) {
+        console.error("Mail API Error:", error);
         throw new AppError(
-          "SERVER_ERROR",
+          "DATABASE_ERROR",
           500,
-          "Error sending mail to recipient",
-          mailError,
+          "couldnt send otp to mail",
+          error,
         );
       }
       //inserting otp in the otps table

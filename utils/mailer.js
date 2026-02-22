@@ -16,7 +16,7 @@ const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
 export const sendEmail = async ({ to, subject, html }) => {
   // 1. Compose the email using Nodemailer's helper (it's great for formatting)
   const mail = new MailComposer({
-    from: `Your App Name <${process.env.EMAIL_USER}>`,
+    from: `Auth wrapper manifested you this <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,
