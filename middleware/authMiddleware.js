@@ -35,12 +35,12 @@ export const authenticateToken = async (req, res, next) => {
     next();
   } catch (error) {
     // Check if the error is an instance of AppError
-    if (err instanceof AppError) {
+    if (error instanceof AppError) {
       return next(err); // Pass the AppError directly to the error handler
     }
     // For unexpected errors, create a new AppError with a generic message
     return next(
-      new AppError("SERVER_ERROR", 500, "Internal server error", err),
+      new AppError("SERVER_ERROR", 500, "Internal server error", error),
     );
   }
 };
