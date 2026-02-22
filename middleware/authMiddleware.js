@@ -19,24 +19,18 @@ export const authenticateToken = async (req, res, next) => {
     try {
       decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
     } catch (err) {
-      if (err.name === "TokenExpiredError") {
-        throw new AppError("VALIDATION_ERROR", 401, "Expired reset token", err);
-      } else {
-        throw new AppError(
-          "VALIDATION_ERROR",
-          401,
-          "Invalid or malformed reset token",
-          err,
-        );
-      }
+      // Logic for specific JWT errors
+      const message =
+        err.name === "TokenExpiredError" ? "Expired token" : "Invalid token";
+      throw new AppError("VALIDATION_ERROR", 401, message, err);
     }
 
-    req.user = user;
+    req.user = decoded;
     next();
   } catch (error) {
     // Check if the error is an instance of AppError
     if (error instanceof AppError) {
-      return next(err); // Pass the AppError directly to the error handler
+      return next(error); // Pass the AppError directly to the error handler
     }
     // For unexpected errors, create a new AppError with a generic message
     return next(
